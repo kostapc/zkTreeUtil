@@ -6,7 +6,7 @@ package com.dobrunov.zktreeutil;
  */
 import java.util.Iterator;
 
-public class TreeNodeIter<T> implements Iterator<TreeNode<T>> {
+public class TreeNodeIter<T extends TreeNodeItem> implements Iterator<TreeNode<T>> {
 
     enum ProcessStages {
         ProcessParent, ProcessChildCurNode, ProcessChildSubNode

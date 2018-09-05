@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TreeNode<T> implements Iterable<TreeNode<T>> {
+public class TreeNode<T extends TreeNodeItem> implements Iterable<TreeNode<T>> {
 
     public T data;
     public TreeNode<T> parent;
@@ -36,6 +36,7 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         childNode.parent = this;
         this.children.add(childNode);
         this.registerChildForSearch(childNode);
+        child.setLevel(getLevel()+1);
         return childNode;
     }
 
