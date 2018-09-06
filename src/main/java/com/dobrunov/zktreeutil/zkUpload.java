@@ -8,6 +8,7 @@ import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Id;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * @author kostapc
@@ -46,7 +47,8 @@ public class zkUpload {
             }
           }
           ACL acl = new ACL();
-          acl.setId(new Id());
+          acl.setId(new Id( "", UUID.randomUUID().toString()));
+          acl.setPerms(0);
           zk.create(
                 path, zn.data, Arrays.asList(acl), CreateMode.PERSISTENT
           );
