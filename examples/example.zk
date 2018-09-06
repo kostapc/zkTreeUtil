@@ -1,0 +1,15 @@
+path=/
+path=/zookeeper
+path=/zookeeper/qwe
+path=/zookeeper/qwe/111
+path=/zookeeper/qwe/222
+path=/zookeeper/qwe/222/qqq	val=qqq val
+path=/zookeeper/qwe/222/aaa	val=aaa val
+path=/zookeeper/qwe/333	val=333 val
+path=/zookeeper/quota
+path=/zookeeper/sad	val=sad val
+path=/zookeeper/sad/123	val=asdfasdf 
+path=/zookeeper/sad/234	val=asdfasdfasdf
+
+path=/zookeeper/sad/333	val=asdfasdfasdfas asdvasd as asd asd
+

@@ -5,6 +5,7 @@ import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.ACL;
+import org.apache.zookeeper.data.Id;
 
 import java.util.Arrays;
 
@@ -26,29 +27,39 @@ public class zkUpload {
 
   public void upload() {
     writeNode(
-        dumpFile.getRootNode()
+        "",dumpFile.getRootNode()
     );
   }
 
-  private void writeNode(TreeNode<zNode> node) {
-    if(node.isLeaf()) {
+  private void writeNode(String inPath, TreeNode<zNode> node) {
       zNode zn = node.data;
-      try {
-        if(zk.exists(zn.path,null)!=null) {
-          zk.delete(zn.path, -1);
+      String path = inPath;
+      if(zn.name!=null && zn.name.length()>0) {
+        path = inPath+"/"+node.data.name;
+        logger.info("writing node: \""+zn.name+"\" ("+path+" # "+inPath+")");
+        try {
+          if(node.isLeaf()) {
+            if (zk.exists(path, (e) -> {
+              logger.warn("checking node " + zn.name + "...");
+            }) != null) {
+              zk.delete(path, -1);
+            }
+          }
+          ACL acl = new ACL();
+          acl.setId(new Id());
+          zk.create(
+                path, zn.data, Arrays.asList(acl), CreateMode.PERSISTENT
+          );
+        } catch (KeeperException | InterruptedException e) {
+          logger.error("error while inserting node " + zn.path, e);
         }
-        ACL acl = new ACL();
-        zk.create(
-            zn.path, zn.data, Arrays.asList(acl), CreateMode.PERSISTENT
-        );
-      } catch (KeeperException | InterruptedException e) {
-        logger.error("error while inserting node "+zn.path, e);
       }
-    } else {
-      for (TreeNode<zNode> treeNode : node) {
-        writeNode(treeNode);
+      if(node.children==null){
+        return;
       }
-    }
+      for (TreeNode<zNode> treeNode : node.children) {
+        writeNode(path,treeNode);
+      }
   }
 
 }
